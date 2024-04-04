@@ -1,4 +1,4 @@
-package com.example.app;
+package com.example.app.ui.training;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

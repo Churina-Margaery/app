@@ -13,3 +13,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+wrapper
+caches
+daemon
+.tmp
+jdks
+native
+android

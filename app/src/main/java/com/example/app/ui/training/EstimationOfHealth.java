@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.app.R;
 
@@ -52,10 +53,13 @@ public class EstimationOfHealth extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                if(position >5){
-                    startActivity(new Intent(EstimationOfHealth.this, HealthResultGood.class));
-                } else if (position <=5) {
-                    startActivity(new Intent(EstimationOfHealth.this, HealthyResultBad.class));
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                if(position <=5){
+                    BadHealthMessage badHealthMessage = new BadHealthMessage();
+                    badHealthMessage.show(fragmentManager, "BadHealth");
+                } else if (position >5) {
+                    HealthMessage healthMessage = new HealthMessage();
+                    healthMessage.show(fragmentManager, "GoodHealth");
                 }
             }
         });
@@ -64,8 +68,6 @@ public class EstimationOfHealth extends AppCompatActivity {
         estimBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent estimGoBack = new Intent(EstimationOfHealth.this, TrainingFragment.class);
-                //startActivity(estimGoBack);
                 finish();
             }
         });
