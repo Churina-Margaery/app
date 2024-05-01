@@ -1,11 +1,15 @@
 package com.example.app.ui.training;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import static android.app.PendingIntent.getActivity;
 
 import android.app.Dialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +20,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.app.R;
 import com.example.app.databinding.ActivityWorkoutBinding;
-import com.example.app.ui.training.ConfirmExit;
 
 
 public class WorkoutActivity extends AppCompatActivity {
@@ -24,7 +27,10 @@ public class WorkoutActivity extends AppCompatActivity {
     private ActivityWorkoutBinding binding;
     Button btnFinishTraining;
     TextView exercise;
-    Dialog dialog;
+    com.example.app.ui.training.DatabaseHelper databaseHelper;
+    SQLiteDatabase db;
+    Cursor userCursor;
+    SimpleCursorAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,10 @@ public class WorkoutActivity extends AppCompatActivity {
         });
         btnFinishTraining.setOnClickListener(oclBtnOk);
 
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        // создаем базу данных
+        databaseHelper.create_db();
+
         exercise = findViewById(R.id.workoutText);
         exercise.setText(extractData());
 
@@ -56,9 +66,30 @@ public class WorkoutActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        db.close();
+        userCursor.close();
     }
 
     private String extractData() {
-        return "Exercise text";
+        String str = "not found";
+        try {
+            // открываем подключение
+            db = databaseHelper.open();
+            //получаем данные из бд в виде курсора
+            userCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE, null);
+            // определяем, какие столбцы из курсора будут выводиться в ListView
+            String[] headers = new String[]{DatabaseHelper.COLUMN_TYPE, DatabaseHelper.COLUMN_CONTENT};
+            // создаем адаптер, передаем в него курсор
+            userAdapter = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item,
+                    userCursor, headers, new int[]{android.R.id.text1, android.R.id.text2}, 0);
+            userCursor = db.rawQuery("select * from " + DatabaseHelper.TABLE + " where " +
+                    DatabaseHelper.COLUMN_TYPE + "=?", new String[]{"сила"});
+            userCursor.moveToFirst();
+
+            return userCursor.getString(2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return str;
+        }
     }
 }

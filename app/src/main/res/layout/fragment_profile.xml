@@ -50,7 +50,7 @@
         tools:ignore="MissingConstraints" />
 
     <Spinner
-        android:id="@+id/activity"
+        android:id="@+id/activities"
         android:layout_width="142dp"
         android:layout_height="50dp"
         android:layout_marginTop="200dp"
@@ -61,16 +61,20 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <Spinner
-        android:id="@+id/amount"
-        android:layout_width="142dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="320dp"
+    <EditText
+        android:id="@+id/editAmountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/amount"
+        android:inputType="number"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.802"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AmountView"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -130,7 +134,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="50dp"
         android:gravity="left"
-        android:text="@string/amount"
+        android:text="@string/amountPerMonth"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold"

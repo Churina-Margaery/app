@@ -13,8 +13,30 @@
     <string name="sex">Пол</string>
     <string name="sexInput">Выберите пол</string>
     <string name="activity">Уровень подвижности</string>
-    <string name="amount">Количество тренировок в месяц</string>
+    <string name="amountPerMonth">Количество тренировок в месяц</string>
+    <string name="amount">Введите число от 1 до 30</string>
     <string name="workoutText">workoutText</string>
     <string name="finishWorkout">Завершить тренировку</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="material_calendar_monday">ПН</string>
+    <string name="material_calendar_tuesday">ВТ</string>
+    <string name="material_calendar_wednesday">СР</string>
+    <string name="material_calendar_thursday">ЧТ</string>
+    <string name="material_calendar_friday">ПТ</string>
+    <string name="material_calendar_saturday">СБ</string>
+    <string name="material_calendar_sunday">ВС</string>
+    <array name="material_calendar_months_array">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </array>
 </resources>

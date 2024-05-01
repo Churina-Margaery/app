@@ -25,6 +25,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     buildFeatures {
         viewBinding = true
@@ -33,6 +35,7 @@ android {
 
 dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.applandeo:material-calendar-view:1.9.2")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)

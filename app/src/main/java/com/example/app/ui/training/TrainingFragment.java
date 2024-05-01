@@ -66,7 +66,6 @@ public class TrainingFragment extends Fragment {
         return rootView;
     }
 
-
     private void inittypespinnerfooter() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, types);

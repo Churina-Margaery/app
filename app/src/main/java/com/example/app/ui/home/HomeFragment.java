@@ -2,11 +2,13 @@ package com.example.app.ui.home;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.example.app.R;
 
 import androidx.annotation.NonNull;
@@ -23,13 +25,30 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private PieChart pieChart;
+
+    private BarChart barChart;
+
+    private void setIconToCalendar(com.applandeo.materialcalendarview.CalendarView calendarView,
+                                   List<EventDay> events, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        try {
+            calendarView.setDate(calendar);
+        } catch (OutOfDateRangeException | NullPointerException e) {
+            Log.e("FitnessApp", "Error setting calendar date: " + e.getMessage());
+        }
+        events.add(new EventDay(calendar, R.drawable.dumbbell_solid));
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +57,18 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
+        com.applandeo.materialcalendarview.CalendarView calendarView = (com.applandeo.materialcalendarview.CalendarView) root.findViewById(R.id.calendarView);
+
+        Calendar minDate = Calendar.getInstance();
+        minDate.set(2024, Calendar.JANUARY, 1);
+        calendarView.setMinimumDate(minDate);
+
+        List<EventDay> events = new ArrayList<>();
+        setIconToCalendar(calendarView, events, 2024, 4, 2);
+        setIconToCalendar(calendarView, events, 2024, 4, 5);
+        calendarView.setEvents(events);
 
         pieChart = (PieChart) root.findViewById(R.id.pieChart);
         pieChart.getDescription().setEnabled(false);
@@ -58,7 +89,7 @@ public class HomeFragment extends Fragment {
         pieChart.setData(data);
         pieChart.invalidate(); // refresh chart
 
-        BarChart barChart = (BarChart) root.findViewById(R.id.barChart);
+        barChart = (BarChart) root.findViewById(R.id.barChart);
         barChart.getDescription().setEnabled(false);
 
         ArrayList<BarEntry> entries2 = new ArrayList<>();
