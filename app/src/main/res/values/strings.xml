@@ -7,9 +7,9 @@
     <string name="checkState">Оценить свое состояние</string>
     <string name="startWorkout">Начать тренировку</string>
     <string name="name">Имя</string>
-    <string name="inputName">Введите своё имя</string>
+    <string name="inputName">Ваше имя</string>
     <string name="age">Возраст</string>
-    <string name="inputAge">В годах</string>
+    <string name="inputAge">Ваш возраст</string>
     <string name="sex">Пол</string>
     <string name="sexInput">Выберите пол</string>
     <string name="activity">Уровень подвижности</string>
@@ -41,4 +41,8 @@
         <item>Ноябрь</item>
         <item>Декабрь</item>
     </array>
+    <string-array name="sex_array">
+        <item>Женский</item>
+        <item>Мужской</item>
+    </string-array>
 </resources>

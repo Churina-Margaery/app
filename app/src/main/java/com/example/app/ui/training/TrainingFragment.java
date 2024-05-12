@@ -3,6 +3,7 @@ package com.example.app.ui.training;
 import static com.example.app.R.id.button;
 import static com.example.app.R.id.button2;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -25,20 +27,25 @@ public class TrainingFragment extends Fragment {
     private FragmentTrainingBinding binding;
     private String[] types = {"Выносливость", "Сила", "Равновесие"};
     private String[] levels = {"Легкий", "Умеренный", "Интенсивный"};
-    Spinner type1;
-    Spinner level1;
+    com.google.android.material.textfield.MaterialAutoCompleteTextView type1;
+    com.google.android.material.textfield.MaterialAutoCompleteTextView level1;
     Button btnStartTraining;
     Button btnStartHealth;
 
+    AutoCompleteTextView autoCompleteTxtType;
+    ArrayAdapter<String> adapterItemsType;
+    AutoCompleteTextView autoCompleteTxtLev;
+    ArrayAdapter<String> adapterItemsLev;
+
+
+    @SuppressLint("WrongViewCast")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_training, container, false);
 
         type1 = rootView.findViewById(R.id.type);
-        inittypespinnerfooter();
 
         level1 = rootView.findViewById(R.id.level);
-        initlevelspinnerfooter();
 
         btnStartTraining = (Button) rootView.findViewById(button2);
         btnStartHealth = (Button) rootView.findViewById(button);
@@ -66,41 +73,20 @@ public class TrainingFragment extends Fragment {
         return rootView;
     }
 
-    private void inittypespinnerfooter() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, types);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        type1.setAdapter(adapter);
-        type1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
-            }
+    @Override
+    public void onResume() {
+        super.onResume();
+        autoCompleteTxtType = requireView().findViewById(R.id.type);
+        adapterItemsType = new ArrayAdapter<String>(requireContext(), R.layout.drop_down_item, types);
+        autoCompleteTxtType.setAdapter(adapterItemsType);
+        autoCompleteTxtType.requestFocus();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
+        autoCompleteTxtLev = requireView().findViewById(R.id.level);
+        adapterItemsLev = new ArrayAdapter<String>(requireContext(), R.layout.drop_down_item, levels);
+        autoCompleteTxtLev.setAdapter(adapterItemsLev);
+        autoCompleteTxtLev.requestFocus();
     }
 
-    private void initlevelspinnerfooter() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, levels);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        level1.setAdapter(adapter);
-        level1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
-    }
 
     @Override
     public void onDestroyView() {

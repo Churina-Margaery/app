@@ -1,5 +1,9 @@
 package com.example.app.ui.profile;
 
+import android.app.Activity;
+import android.content.Context;
+import android.widget.ArrayAdapter;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -10,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,9 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.app.MainActivity;
 import com.example.app.R;
 import com.example.app.databinding.FragmentProfileBinding;
 
@@ -28,8 +35,8 @@ import com.example.app.databinding.FragmentProfileBinding;
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
-    private String[] sexes = {"Мужчина", "Женщина"};
-    private String[] activities = {"Низкий", "Умеренный", "Высокий"};
+    private String[] sexes = {"Муж", "Жен"};
+    private String[] activities = {"Малоподвижный", "Умеренный", "Активный"};
 
     ImageView days5;
     ImageView days10;
@@ -37,8 +44,9 @@ public class ProfileFragment extends Fragment {
     ImageView strength5;
     ImageView strength10;
     ImageView strength30;
-    Spinner sexS;
-    Spinner activityS;
+    com.google.android.material.textfield.MaterialAutoCompleteTextView sexS;
+
+    com.google.android.material.textfield.MaterialAutoCompleteTextView activityS;
     Button saveButton;
     EditText editAmount;
     EditText forName;
@@ -52,15 +60,20 @@ public class ProfileFragment extends Fragment {
     String levelOfActivity;
 
 
+    AutoCompleteTextView autoCompleteTxt;
+    AutoCompleteTextView autoCompleteTxtAct;
+    ArrayAdapter<String> adapterItems;
+    ArrayAdapter<String> adapterItemsAct;
+
+
+    @SuppressLint("WrongViewCast")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel =
                 new ViewModelProvider(this).get(ProfileViewModel.class);
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         sexS = rootView.findViewById(R.id.sexes);
-        initsexspinnerfooter();
         activityS = rootView.findViewById(R.id.activities);
-        initactivityspinnerfooter();
         editAmount = rootView.findViewById(R.id.editAmountText);
         editAmount.setFilters(new InputFilter[]{new MinMaxFilter(1, 30)});
         forName = rootView.findViewById(R.id.editNameText);
@@ -71,8 +84,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 age = Integer.parseInt(String.valueOf(forAge.getText()));
                 name = String.valueOf(forName.getText());
-                sex = sexS.getSelectedItem().toString();
-                levelOfActivity = activityS.getSelectedItem().toString();
+                sex = sexS.toString();
+                levelOfActivity = activityS.toString();
                 neededSessions = Integer.parseInt(String.valueOf(editAmount.getText()));
             }
         });
@@ -93,7 +106,23 @@ public class ProfileFragment extends Fragment {
             days30.setImageResource(R.drawable.thirtydays);
         }
         return rootView;
+
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        autoCompleteTxt = requireView().findViewById(R.id.sexes);
+        adapterItems = new ArrayAdapter<String>(requireContext(), R.layout.drop_down_item, sexes);
+        autoCompleteTxt.setAdapter(adapterItems);
+
+        autoCompleteTxtAct = requireView().findViewById(R.id.activities);
+        adapterItemsAct = new ArrayAdapter<String>(requireContext(), R.layout.drop_down_item, activities);
+        autoCompleteTxtAct.setAdapter(adapterItemsAct);
+        autoCompleteTxt.requestFocus();
+        autoCompleteTxtAct.requestFocus();
+    }
+
 
     public class MinMaxFilter implements InputFilter {
         private int minValue;
@@ -118,43 +147,6 @@ public class ProfileFragment extends Fragment {
             // Reject the input
             return "";
         }
-    }
-
-    private void initsexspinnerfooter() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, sexes);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        sexS.setAdapter(adapter);
-        sexS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
-    }
-
-    private void initactivityspinnerfooter() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, activities);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        activityS.setAdapter(adapter);
-        activityS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
     }
     @Override
     public void onDestroyView() {

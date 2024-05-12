@@ -5,9 +5,13 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
+import java.util.Calendar;
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.app.DataSingleton;
 
 public class ConfirmExit extends DialogFragment {
     @NonNull
@@ -28,8 +32,12 @@ public class ConfirmExit extends DialogFragment {
         });
         builder.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getActivity(), "Продолжаем", Toast.LENGTH_LONG)
-                        .show();
+                Calendar calendar = Calendar.getInstance();
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DATE);
+
+                DataSingleton.getInstance().updateCalendar(month, day);
+                getActivity().finish();
             }
         });
         builder.setCancelable(true);
